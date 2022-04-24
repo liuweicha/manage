@@ -1,0 +1,245 @@
+
+
+1、商品查询
+
+接口名：getGoodsList
+
+入参：
+{
+    "itemName":"牛",
+    "pageSize":"10",
+    "pageNo":"1"
+
+}
+
+出参：
+
+{
+    "attributes": null,
+    "obj": [
+        {
+            "id": "40288b8f7faa7911017faa8201f80007",
+            "itemNum": null,
+            "createTime": 1647833121000,
+            "itemPrice": "5.00",
+            "itemUnit": "瓶",
+            "itemInPrice": "3.00",
+            "itemStatus": null,
+            "itemCode": "112000",
+            "itemName": "红牛"
+        }
+    ],
+    "msg": "操作成功",
+    "success": true
+}
+
+
+2、生成订单
+
+接口名： createRoomOrder
+
+入参：
+
+{
+    "roomId":"40288b8f7faa7911017faa7d89480003"
+}
+
+出参：
+
+{
+    "attributes": null,
+    "obj": null,
+    "msg": "订单生成成功！",
+    "success": true
+}
+
+3、查询订单
+
+接口名：getRoomOrderByRoomId
+
+入参：
+
+{
+    "roomId":"40288b8f7faa7911017faa7d89480003"
+}
+
+出参：
+
+{
+    "attributes": null,
+    "obj": {
+        "orderDetail": [
+            {
+                "id": "40288b8f802ca42601802ca4e60f0000",
+                "createTime": 1650016440000,
+                "itemPrice": "25.00",
+                "itemCode": "111000",
+                "itemName": "黄鹤楼硬盒",
+                "itemAmount": "25.00",
+                "itemId": "40288b8f7faa7911017faa7bdbfb0001",
+                "itemNum": 1,
+                "orderCode": "20220415174119",
+                "payTime": null,
+                "payStatus": 0,
+                "orderId": "40288b8f802c8a9301802c9934a70002"
+            },
+            {
+                "id": "40288b8f802ca42601802ca500590001",
+                "createTime": 1650016450000,
+                "itemPrice": "5.00",
+                "itemCode": "112000",
+                "itemName": "红牛",
+                "itemAmount": "20.00",
+                "itemId": "40288b8f7faa7911017faa8201f80007",
+                "itemNum": 4,
+                "orderCode": "20220415174119",
+                "payTime": null,
+                "payStatus": 0,
+                "orderId": "40288b8f802c8a9301802c9934a70002"
+            }
+        ],
+        "order": {
+            "id": "40288b8f802c8a9301802c9934a70002",
+            "endTime": null,
+            "startTime": 1650015679000,
+            "paidInAmount": "0.00",
+            "receivableAmount": "53.1",
+            "orderAmount": "0.00",
+            "roomName": "梅苑",
+            "roomPrice": "30.00",
+            "paidAmount": "0.00",
+            "itemAmount": "45.00",
+            "roomCode": "101",
+            "orderCode": "20220415174119",
+            "orderStatus": 0,
+            "roomTime": "0.27",
+            "roomId": "40288b8f7faa7911017faa7d89480003",
+            "roomAmount": "8.1"
+        }
+    },
+    "success": true,
+    "msg": "操作成功"
+}
+
+4、添加商品
+
+接口名：addGoods
+
+入参：
+
+{
+    "orderId":"40288b8f802c8a9301802c9934a70002",
+    "itemList":[{
+        "itemId":"40288b8f7faa7911017faa7bdbfb0001",
+        "itemCode":"111000",
+        "itemName":"黄鹤楼硬盒",
+        "itemPrice":"25",
+        "itemNum":"1",
+		"itemUnit":"盒",
+        "itemAmount":"25"
+    },{
+        "itemId":"40288b8f7faa7911017faa8201f80007",
+        "itemCode":"112000",
+        "itemName":"红牛",
+        "itemPrice":"5",
+        "itemNum":"4",
+		"itemUnit":"瓶",
+        "itemAmount":"20"
+    }]
+}
+
+出参：
+
+{
+    "attributes": null,
+    "obj": null,
+    "success": true,
+    "msg": "商品添加成功！"
+}
+
+5、商品支付
+
+接口名：payGoods
+
+入参：
+
+{
+    "orderId":"40288b8f802c8a9301802c9934a70002",
+    "itemList":[{
+        "detailId":"40288b8f802ca42601802ca4e60f0000"
+    }]
+}
+
+出参：
+
+{
+    "attributes": null,
+    "obj": null,
+    "msg": "商品支付成功！",
+    "success": true
+}
+
+
+6、订单支付
+
+接口名：completeOrder
+
+入参：
+
+{
+    "orderId":"40288b8f802c8a9301802c9934a70002",
+    "payInAmount":"500",
+    "roomTime":"1605",
+    "roomAmount":"491",
+    "receivableAmount":"536"
+
+}
+
+出参：
+
+{
+    "attributes": null,
+    "obj": null,
+    "success": true,
+    "msg": "结束订单成功！"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
