@@ -62,6 +62,8 @@
       }
       .tableContent{
         margin: 0 auto;
+        max-height: 300px;
+        overflow-y: auto;
         th{
           background-color: #F9F5EA;
         }
@@ -104,6 +106,9 @@
           color: red;
           font-weight: 500;
         }
+      }
+      .goodMoney2{
+        margin-top: -40px;
       }
     }
 
@@ -200,7 +205,7 @@
       </div>
     </div>
     <div class="roomMoney" v-if="roomBaseInfo.roomStatus === 1">
-      小计
+      房间费用小计
       <span class="num2">{{onSetRoomPrice(roomBaseInfo.startTime, roomBaseInfo.roomPrice)}}</span> 元
     </div>
 
@@ -226,7 +231,7 @@
       <div class="goodTitle">
         商品清单
       </div>
-      <div class="tableContent" v-if="roomDetail && roomDetail.orderDetail">
+      <div class="tableContent scrollContent" v-if="roomDetail && roomDetail.orderDetail">
         <el-table
                 :data="roomDetail.orderDetail"
                 border
@@ -245,13 +250,22 @@
         </el-table>
       </div>
       <div class="goodMoney">
-        共 <span class="num1">3</span>
-        件商品，小计 <span class="num2">{{goodsTotalPrice}}</span> 元
+        共 <span class="num1">{{roomDetail.orderDetail.length || 0}}</span>
+        件商品，商品费用小计 <span class="num2">{{goodsTotalPrice}}</span> 元
         <div class="updateGood" @click="_isShowGoodPop(true)">添加商品</div>
         <div class="updateGood updateGood2" @click="_onPayGoodsFun()">商品结算</div>
       </div>
     </div>
 
+
+    <div class="goodContent"  v-if="roomDetail.order && roomDetail.order.couponAmount">
+      <div class="goodTitle">
+        优惠券信息
+      </div>
+      <div class="goodMoney goodMoney2">
+        优惠券面额：<span class="num2">{{roomDetail.order.couponAmount}}</span> 元
+      </div>
+    </div>
 
 
     <div class="bottomContent" v-if="roomBaseInfo.roomStatus === 1">
@@ -260,6 +274,7 @@
           <div class="moneyText1">
             应付款 <span class="redText">{{totalMoney}}</span> 元
           </div>
+          <div style="margin-left: 10px;font-size: 12px">(优惠券金额{{roomDetail.order.couponAmount}})</div>
           <div class="moneyText2">
             折后价 <input type="number" v-model="reallyMoney">
           </div>
@@ -303,15 +318,20 @@
           this.goodsTotalPrice = this.goodsTotalPrice + parseInt(item.itemAmount)
         })
       }
-      setTimeout(() => {
-        this.totalMoney = this.goodsTotalPrice + this.roomTotalPrice;
-        this.reallyMoney = this.goodsTotalPrice + this.roomTotalPrice;
-      }, 500);
+      this.totalMoney = this.goodsTotalPrice + this.roomTotalPrice;
+      // this.reallyMoney = this.goodsTotalPrice + this.roomTotalPrice;
 
       this.timer = setInterval(() => {
         let _timer = new Date().getTime();
         let t = this.roomBaseInfo.startTime;
-        this.roomTime = (Math.floor((_timer - t)/1000))
+        this.roomTime = (Math.floor((_timer - t)/1000));
+        this.totalMoney = this.goodsTotalPrice + this.roomTotalPrice;
+        this.reallyMoney = this.goodsTotalPrice + this.roomTotalPrice;
+        const _money = this.roomDetail && this.roomDetail.order && this.roomDetail.order.couponAmount;
+        if(_money){
+          this.reallyMoney = this.reallyMoney - _money;
+          if(this.reallyMoney < 0)this.reallyMoney = 0;
+        }
       }, 1000)
       if(this.roomBaseInfo && this.roomBaseInfo.roomStatus === 0)this._onGetCodeList()
     },
