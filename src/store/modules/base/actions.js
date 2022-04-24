@@ -4,7 +4,7 @@ import {getUrl} from '../../../config/urlConfig'
 import {getRequest, postRequest} from '../../../services/request'
 export default {
   async roomListAction ({commit,state,rootState}, data){
-    commit('IS_SHOW_LOADING',true);
+    // commit('IS_SHOW_LOADING',true);
     const url = getUrl('base','roomListUrl');
     try {
       const result = await postRequest(url, {});

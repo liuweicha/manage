@@ -215,6 +215,9 @@
     async mounted () {
       this.pageHeight = document.documentElement.clientHeight;
       this._onGetRoomList();
+      setInterval(() => {
+        this._onGetRoomList();
+      }, 1000 * 10)
     },
     methods: {
       _onSetShowDetail(item, flag, index) {
