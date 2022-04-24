@@ -94,6 +94,19 @@ export default {
     }
   },
 
+  async getCouponAction ({commit,state,rootState}, data){
+    commit('IS_SHOW_LOADING',true);
+    const url = getUrl('base','getCouponUrl');
+    try {
+      const result = await postRequest(url, data);
+      commit('IS_SHOW_LOADING', false);
+      return result
+    }catch (e) {
+      commit('IS_SHOW_LOADING', false);
+      return null
+    }
+  },
+
   async showSharePopAction({commit,state,rootState}, data){
     commit('SET_IS_SHOW_SHARE_POP', data)
   },

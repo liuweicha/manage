@@ -205,7 +205,15 @@
     </div>
 
     <div class="btnContents" v-if="roomBaseInfo.roomStatus === 0">
-      <el-input v-model="coupons" class="couponsInput" placeholder="请输入优惠券"></el-input>
+      <el-select v-model="coupons" class="couponsInput" placeholder="请输入优惠券">
+        <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.name + item.price + '元'"
+                :value="item.id">
+        </el-option>
+      </el-select>
+
       <el-button class="startRoomBtn"
                  @click="onCreateRoomFun()"
                  type="primary">
@@ -277,7 +285,8 @@
         roomTotalPrice: 0,
         timer: "",
         roomTime: "",  // 单位秒
-        multipleSelection: ""
+        multipleSelection: "",
+        options: [],
       };
     },
     filters: {
@@ -304,6 +313,7 @@
         let t = this.roomBaseInfo.startTime;
         this.roomTime = (Math.floor((_timer - t)/1000))
       }, 1000)
+      if(this.roomBaseInfo && this.roomBaseInfo.roomStatus === 0)this._onGetCodeList()
     },
     methods: {
       _isShowGoodPop(data) {
@@ -365,7 +375,7 @@
       onCreateRoomFun() {
         let param = {
           roomId: this.roomBaseInfo.id,
-          couponId: "",
+          couponId: this.coupons,
         }
         this.$store.dispatch("createRoomAction", param).then((res) => {
           if(res && res.success){
@@ -380,6 +390,17 @@
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
+      },
+      _onGetCodeList() {
+        this.$store.dispatch("getCouponAction").then((res) => {
+          if(res && res.success){
+           this.options = res.obj;
+          } else {
+            this.$store.dispatch('errorMessage', {msg: res && res.msg || '服务异常，请稍后重试~',status: true})
+          }
+        }).catch((err) => {
+          this.$store.dispatch('errorMessage', {msg: err && err.msg || '服务异常，请稍后重试~',status: true})
+        })
       }
     }
   }

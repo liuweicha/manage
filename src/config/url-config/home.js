@@ -12,6 +12,7 @@ export default {
       payOrderUrl: 'rest/completeOrder', //订单支付
       addGoodsUrl: 'rest/addGoods', //订单支付
       createRoomUrl: 'rest/createRoomOrder', //点击开始，生成房间订单
+      getCouponUrl: 'rest/getCouponList', //查询优惠劵信息
     }
   }
 }

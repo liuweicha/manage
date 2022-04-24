@@ -156,7 +156,8 @@
             <div class="roomDesc">{{item.roomDesc}}</div>
             <div v-if="item.roomStatus === 1">
               <div class="priceInfo">
-                消费金额 <span>{{item.roomPrice}}</span> 元
+                <!--消费金额 <span>{{item.roomPrice}}</span> 元-->
+                累计时长 <span>{{onSetRoomTime(item.startTime)}}</span>
               </div>
               <div class="timeInfo">
                 入座时间：{{item.startTime | setTime('MM月dd日 hh:mm')}}
@@ -184,7 +185,7 @@
   import DetailPop from "../components/detailPop";
   import GoodPop from "../components/goodPop";
   import {mapGetters} from 'vuex';
-  import {setTime} from '../services/transformTime';
+  import {setTime, countdownTime} from '../services/transformTime';
   export default {
     data() {
       return {
@@ -262,6 +263,10 @@
         }).catch((err) => {
           this.$store.dispatch('errorMessage', {msg: '服务异常，请稍后重试~',status: true})
         })
+      },
+      onSetRoomTime(t){
+        let _timer = new Date().getTime();
+        return countdownTime((Math.floor((_timer - t)/1000)))
       }
     }
   }

@@ -11,6 +11,7 @@
       width: 1100px;
       height: 700px;
       background-color: #FFFFFF;
+      border: 1px solid transparent;
       border-radius: 10px;
       position: relative;
       top: 50%;
@@ -242,7 +243,7 @@
               <!--</el-select>-->
 
               <el-input v-model="input" class="searchInput" placeholder="请输入内容"></el-input>
-              <el-button class="searchBtn">搜索</el-button>
+              <el-button class="searchBtn" @click="onGetGoodListFun">搜索</el-button>
             </div>
             <div class="goodListC scrollContent">
               <div class="thHeader tdContent"
@@ -338,7 +339,12 @@
     },
     methods: {
       onGetGoodListFun() {
-        this.$store.dispatch("getGoodsAction", {}).then((res) => {
+        let param = {
+          pageNo: 1,
+          pageSize: 200,
+          itemName: this.input,
+        }
+        this.$store.dispatch("getGoodsAction", param).then((res) => {
           if(res && res.success){
             res.obj.forEach((item) => {
               item.buyNum = 1;
@@ -346,7 +352,7 @@
             this.goodList = res.obj;
           } else {
             this.$store.dispatch('errorMessage', {
-              msg: '服务异常，请稍后重试~',
+              msg: res && res.msg || '服务异常，请稍后重试~',
               status: true
             })
           }
