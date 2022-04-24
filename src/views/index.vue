@@ -217,7 +217,7 @@
       this._onGetRoomList();
       setInterval(() => {
         this._onGetRoomList();
-      }, 1000 * 10)
+      }, 1000 * 60 * 5)
     },
     methods: {
       _onSetShowDetail(item, flag, index) {
