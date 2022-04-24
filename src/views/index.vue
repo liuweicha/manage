@@ -244,6 +244,7 @@
         if(orderId)this.orderId = orderId;
         if(!data && this.clickIndex >= 0){
           // 添加商品 刷新订单详情弹窗
+          this.isShowDetail = false;
           this._onSetShowDetail(this.roomListData[this.clickIndex], true)
         }
         this.isShowGoodPop = data;
