@@ -139,12 +139,12 @@
 </style>
 <template>
   <div class="home_container">
-    <div class="home_content">
+    <div class="home_content scrollContent" :style="{height: pageHeight + 'px'}">
       <div class="roomListContent">
         <div class="roomTitle">大厅</div>
         <div class="roomLiBox">
           <div class="roomLi"
-               v-for="(item, index) in roomListData"
+               v-for="(item, index) in roomListData.bigRoomList"
                :key="'key_' + index"
                @click="_onSetShowDetail(item, true, index)">
             <div class="roomNum">
@@ -168,6 +168,37 @@
             </div>
           </div>
         </div>
+
+        <div class="roomTitle" v-if="roomListData.smallRoomList && roomListData.smallRoomList.length">
+          包间
+        </div>
+        <div class="roomLiBox" v-if="roomListData.smallRoomList && roomListData.smallRoomList.length">
+          <div class="roomLi"
+               v-for="(item, index) in roomListData.smallRoomList"
+               :key="'key_' + index"
+               @click="_onSetShowDetail(item, true, index)">
+            <div class="roomNum">
+              <div>
+                <span>{{item.roomCode}}</span>
+                {{item.roomName}}
+              </div>
+            </div>
+            <div class="roomDesc">{{item.roomDesc}}</div>
+            <div v-if="item.roomStatus === 1">
+              <div class="priceInfo">
+                <!--消费金额 <span>{{item.roomPrice}}</span> 元-->
+                累计时长 <span>{{onSetRoomTime(item.startTime)}}</span>
+              </div>
+              <div class="timeInfo">
+                入座时间：{{item.startTime | setTime('MM月dd日 hh:mm')}}
+              </div>
+            </div>
+            <div class="notUsedRoom" v-else>
+              空闲中
+            </div>
+          </div>
+        </div>
+
         <div class="detailPopContainer" v-if="isShowDetail">
           <div class="detailPopCover" @click="_onSetShowDetail('', false, null)"></div>
           <div class="detailPopContent"
@@ -249,14 +280,27 @@
         if(!data && this.clickIndex >= 0){
           // 添加商品 刷新订单详情弹窗
           this.isShowDetail = false;
-          this._onSetShowDetail(this.roomListData[this.clickIndex], true)
+          // this._onSetShowDetail(this.roomListData[this.clickIndex], true)
+          this._onSetShowDetail(this.roomBaseInfo, true)
         }
         this.isShowGoodPop = data;
       },
       _onGetRoomList(){
         this.$store.dispatch("roomListAction").then((res) => {
-          if(res && res.success){
-            this.roomListData = res.obj;
+          if(res && res.success && res.obj && res.obj.length){
+            let _ary1 = [];
+            let _ary2 = [];
+            res.obj.forEach((item) => {
+              if(item.roomType === '1'){
+                _ary1.push(item);
+              } else {
+                _ary2.push(item);
+              }
+            });
+            this.roomListData = {
+              bigRoomList: _ary1,
+              smallRoomList: _ary2,
+            }
           } else {
             this.$store.dispatch('errorMessage', {
               msg: res && res.msg || '服务异常，请稍后重试~',
@@ -264,7 +308,7 @@
             })
           }
         }).catch((err) => {
-          this.$store.dispatch('errorMessage', {msg: '服务异常，请稍后重试~',status: true})
+          this.$store.dispatch('errorMessage', {msg:  err && err.msg || '服务异常，请稍后重试~',status: true})
         })
       },
       onSetRoomTime(t){
