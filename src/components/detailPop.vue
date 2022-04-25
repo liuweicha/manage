@@ -258,7 +258,7 @@
     </div>
 
 
-    <div class="goodContent"  v-if="roomDetail.order && roomDetail.order.couponAmount">
+    <div class="goodContent"  v-if="roomDetail && roomDetail.order && roomDetail.order.couponAmount">
       <div class="goodTitle">
         优惠券信息
       </div>
@@ -274,7 +274,10 @@
           <div class="moneyText1">
             应付款 <span class="redText">{{totalMoney}}</span> 元
           </div>
-          <div style="margin-left: 10px;font-size: 12px">(优惠券金额{{roomDetail.order.couponAmount}})</div>
+          <div style="margin-left: 10px;font-size: 12px"
+               v-if="roomDetail && roomDetail.order && roomDetail.order.couponAmount">
+            (优惠券金额{{roomDetail.order.couponAmount}})
+          </div>
           <div class="moneyText2">
             折后价 <input type="number" v-model="reallyMoney">
           </div>
@@ -312,6 +315,7 @@
     },
 
     mounted () {
+      console.log("this.this.roomBaseInfo....", this.roomBaseInfo)
       if(this.roomDetail && this.roomDetail.orderDetail){
         this.roomDetail.orderDetail.forEach((item) => {
           item.payText = item.payStatus === 0 ? '未支付' : '已支付';
